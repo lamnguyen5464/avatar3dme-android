@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.lamnguyen5464.avatar3dme">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- camera access -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- camera access -->
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -19,6 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
+        <activity
+            android:name=".ProcessingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CaptureConfirmationActivity"
+            android:exported="false" />
         <activity
             android:name=".FaceShoot"
             android:exported="false" />

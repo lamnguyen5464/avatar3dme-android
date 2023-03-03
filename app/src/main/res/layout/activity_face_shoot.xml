@@ -11,7 +11,9 @@
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/PRIMARY_01" />
+        android:background="@color/PRIMARY_01" >
+
+    </androidx.camera.view.PreviewView>
 
     <RelativeLayout
         android:id="@+id/container_text"
@@ -54,6 +56,17 @@
     <!--        android:layout_centerVertical="true"-->
     <!--        android:src="@drawable/frame_scan_qrcode" />-->
 
+    <Button
+        android:id="@+id/bt_shoot"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:text=""
+        android:contentDescription="buttonCapture"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/bt_back_style"
+        />
 
     <ImageView
         android:id="@+id/bt_back"

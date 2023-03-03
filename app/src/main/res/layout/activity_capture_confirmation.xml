@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/camera_result"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="32dp"
+    tools:context=".CaptureConfirmationActivity">
+
+    <ImageView
+        android:id="@+id/image_result"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginVertical="24dp"
+        android:layout_centerHorizontal="true"  />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_result"
+        android:layout_marginBottom="12dp"
+        android:textSize="24dp"
+        android:text="Happy with capture?" />
+
+    <Button
+        android:id="@+id/bt_retry"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@color/BACKGROUND_GRAY"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textView"
+        android:layout_marginBottom="6dp"
+        android:text="Try again" />
+
+    <Button
+        android:id="@+id/bt_continueProcessing"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_200"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/bt_retry"
+        android:text="Continue" />
+</RelativeLayout>

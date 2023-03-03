@@ -1,9 +1,9 @@
 package com.lamnguyen5464.avatar3dme
 
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.Preview
+import android.annotation.SuppressLint
+import android.media.Image
+import androidx.camera.core.*
+import androidx.camera.core.ImageCapture.OnImageCapturedCallback
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.LifecycleOwner
@@ -14,29 +14,36 @@ class AppCamera(
     private val listenerCamera: ListenableFuture<ProcessCameraProvider>,
     private val previewView: PreviewView,
     private val executor: Executor,
-    private val onFoundQRCallBack: (String) -> Unit
-) {
+    private val onCapturedImage: (Image) -> Unit
+): OnImageCapturedCallback() {
+
+    private val preview = Preview.Builder().build()
+        .also {
+            it.setSurfaceProvider(previewView.surfaceProvider)
+        }
+
+    // Select back camera as a default
+    private val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+    private val imageCapture = ImageCapture.Builder()
+        .build()
+
+    private val imageAnalyzer = ImageAnalysis.Builder()
+        .build()
+
+    @SuppressLint("UnsafeOptInUsageError")
+    override fun onCaptureSuccess(image: ImageProxy) {
+        image.image?.let { onCapturedImage(it) }
+    }
+
+    fun capture() {
+        imageCapture.takePicture(executor, this)
+    }
 
     fun start(lifecycleOwner: LifecycleOwner) {
         listenerCamera.addListener({
             try {
                 val cameraProvider: ProcessCameraProvider = listenerCamera.get()
-                val preview = Preview.Builder().build()
-                    .also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
-                    }
-
-                // Select back camera as a default
-                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-                val imageCapture = ImageCapture.Builder()
-                    .build()
-
-                val imageAnalyzer = ImageAnalysis.Builder()
-                    .build()
-                    .also {
-//                        it.setAnalyzer(executor, this::getCameraAnalyzer)
-                    }
 
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
