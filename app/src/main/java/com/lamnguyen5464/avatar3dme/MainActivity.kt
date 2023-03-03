@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-        startActivity(Intent(this, FaceShoot::class.java))
+        //startActivity(Intent(this, FaceShoot::class.java))
+        startActivity(Intent(this, ModelActivity::class.java))
     }
 }
