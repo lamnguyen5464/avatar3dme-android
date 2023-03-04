@@ -1,9 +1,8 @@
-package com.lamnguyen5464.avatar3dme.utils
+package com.lamnguyen5464.avatar3dme.core.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.Image
-import java.nio.ByteBuffer
 
 
 fun Image.toBitMap(): Bitmap {

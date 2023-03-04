@@ -1,4 +1,4 @@
-package com.lamnguyen5464.avatar3dme
+package com.lamnguyen5464.avatar3dme.view
 
 import android.Manifest
 import android.content.Intent
@@ -18,8 +18,11 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.lamnguyen5464.avatar3dme.R
+import com.lamnguyen5464.avatar3dme.core.camera.AppCamera
+import com.lamnguyen5464.avatar3dme.core.providers.Providers
 
-class FaceShoot : AppCompatActivity() {
+class FaceShootActivity : AppCompatActivity() {
 
     private val camera by lazy {
         AppCamera(
@@ -27,8 +30,8 @@ class FaceShoot : AppCompatActivity() {
             findViewById<PreviewView>(R.id.camera_view),
             ContextCompat.getMainExecutor(this),
         ) { image ->
-            CurrentProcessingImage.instance.image = image
-            startActivity(Intent(this, CaptureConfirmationActivity::class.java))
+            Providers.currentProcessingImage = image
+            startActivity(Intent(this.applicationContext, CaptureConfirmationActivity::class.java))
         }
     }
 
@@ -53,7 +56,7 @@ class FaceShoot : AppCompatActivity() {
         ) {
             ActivityCompat.requestPermissions(
                 this, arrayOf(Manifest.permission.CAMERA),
-                Companion.REQUEST_CAMERA_PERMISSION
+                REQUEST_CAMERA_PERMISSION
             )
         } else {
             startCamera()
@@ -67,7 +70,7 @@ class FaceShoot : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            Companion.REQUEST_CAMERA_PERMISSION -> {
+            REQUEST_CAMERA_PERMISSION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startCamera()
                 } else {

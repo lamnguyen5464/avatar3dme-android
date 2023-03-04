@@ -1,4 +1,4 @@
-package com.lamnguyen5464.avatar3dme
+package com.lamnguyen5464.avatar3dme.core.camera
 
 import android.annotation.SuppressLint
 import android.media.Image
@@ -33,6 +33,9 @@ class AppCamera(
 
     @SuppressLint("UnsafeOptInUsageError")
     override fun onCaptureSuccess(image: ImageProxy) {
+        if (image.image == null) {
+            println("[CAM] capture image is null")
+        }
         image.image?.let { onCapturedImage(it) }
     }
 

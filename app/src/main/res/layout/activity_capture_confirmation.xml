@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginHorizontal="32dp"
-    tools:context=".CaptureConfirmationActivity">
+    tools:context=".view.CaptureConfirmationActivity">
 
     <ImageView
         android:id="@+id/image_result"
