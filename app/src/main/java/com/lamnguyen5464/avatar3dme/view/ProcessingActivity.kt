@@ -11,7 +11,7 @@ class ProcessingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_processing)
 
-        findViewById<Button>(R.id.bt_cancelProcess).setOnClickListener {
+        findViewById<Button>(R.id.bt_cancel).setOnClickListener {
             startActivity(Intent(this, FaceShootActivity::class.java))
         }
     }

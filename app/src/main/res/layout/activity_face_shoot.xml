@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/camera_layout"
     android:layout_width="match_parent"
@@ -10,8 +11,7 @@
     <androidx.camera.view.PreviewView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/PRIMARY_01" >
+        android:layout_height="match_parent">
 
     </androidx.camera.view.PreviewView>
 
@@ -20,32 +20,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:translationZ="90dp"
-        >
+        android:translationZ="90dp">
 
-        <TextView
-            android:id="@+id/text_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Face"
-            android:textColor="@color/BLACK_01"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:translationZ="90dp"
-            android:layout_centerHorizontal="true"
-            />
+        <!--        <TextView-->
+        <!--            android:id="@+id/text_title"-->
+        <!--            style="@style/TextAppearance.Material3.TitleMedium"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_centerHorizontal="true"-->
+        <!--            android:text="Face"-->
+        <!--            android:translationZ="90dp" />-->
 
-        <TextView
-            android:id="@+id/text_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_title"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:textColor="@color/BLACK_01"
-            android:layout_marginHorizontal="24dp"
-            android:textSize="12sp"
-            />
+        <!--        <TextView-->
+        <!--            android:id="@+id/text_desc"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_below="@+id/text_title"-->
+        <!--            android:layout_centerHorizontal="true"-->
+        <!--            android:layout_marginHorizontal="24dp"-->
+        <!--            android:textAlignment="center"-->
+        <!--            android:textSize="12sp" />-->
 
     </RelativeLayout>
 
@@ -57,26 +51,29 @@
     <!--        android:src="@drawable/frame_scan_qrcode" />-->
 
     <Button
+        style="@style/Widget.Material3.Button.ElevatedButton"
         android:id="@+id/bt_shoot"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:text=""
-        android:contentDescription="buttonCapture"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="24dp"
-        android:background="@drawable/bt_back_style"
-        />
+        android:background="@drawable/bt_capture"
+        android:contentDescription="buttonCapture"
+        app:backgroundTint="@color/WHITE" />
 
-    <ImageView
+    <Button
         android:id="@+id/bt_back"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="12dp"
         android:layout_marginStart="12dp"
-        android:background="@drawable/bt_back_style"
-        android:src="@drawable/ic_close_black"
-        android:translationZ="90dp" />
+        android:text="Back"
+        android:textColor="@color/md_theme_dark_onBackground"
+        android:translationZ="90dp"
+        app:icon="@drawable/baseline_arrow_back_ios_24"
+        app:iconTint="@color/md_theme_dark_onBackground" />
 
 
 </RelativeLayout>

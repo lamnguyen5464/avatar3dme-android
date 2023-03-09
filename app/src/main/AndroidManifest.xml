@@ -27,7 +27,8 @@
             android:exported="false" />
         <activity
             android:name=".view.FaceShootActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.MainActivity"
             android:exported="true">

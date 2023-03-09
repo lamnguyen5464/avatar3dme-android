@@ -41,7 +41,7 @@ class FaceShootActivity : AppCompatActivity() {
 
         checkAndRequestCameraPermission()
 
-        findViewById<ImageView>(R.id.bt_back).setOnClickListener {
+        findViewById<Button>(R.id.bt_back).setOnClickListener {
             finish()
         }
 
@@ -107,7 +107,7 @@ class FaceShootActivity : AppCompatActivity() {
         layoutText.setMargins(0, EDGE_LENGTH / 2, 0, 0)
         layoutText.addRule(RelativeLayout.CENTER_HORIZONTAL)
         findViewById<RelativeLayout>(R.id.container_text).layoutParams = layoutText
-        findViewById<TextView>(R.id.text_desc).text = intent?.extras?.get("desc")?.toString() ?: ""
+        //findViewById<TextView>(R.id.text_desc).text = intent?.extras?.get("desc")?.toString() ?: ""
 
         //right
         val viewPaddingRight = View(this)

@@ -2,8 +2,10 @@ package com.lamnguyen5464.avatar3dme.core.camera
 
 import android.annotation.SuppressLint
 import android.media.Image
+import android.view.Surface
 import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.OnImageCapturedCallback
+import androidx.camera.core.impl.ImageCaptureConfig
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.LifecycleOwner
@@ -15,9 +17,11 @@ class AppCamera(
     private val previewView: PreviewView,
     private val executor: Executor,
     private val onCapturedImage: (Image) -> Unit
-): OnImageCapturedCallback() {
+) : OnImageCapturedCallback() {
 
-    private val preview = Preview.Builder().build()
+    private val preview = Preview.Builder().apply {
+        setTargetRotation(Surface.ROTATION_180)
+    }.build()
         .also {
             it.setSurfaceProvider(previewView.surfaceProvider)
         }
@@ -36,6 +40,7 @@ class AppCamera(
         if (image.image == null) {
             println("[CAM] capture image is null")
         }
+        val rotation = image.imageInfo.rotationDegrees
         image.image?.let { onCapturedImage(it) }
     }
 
