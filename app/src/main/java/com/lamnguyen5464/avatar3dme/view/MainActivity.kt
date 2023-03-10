@@ -7,6 +7,7 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.lamnguyen5464.avatar3dme.R
 import com.lamnguyen5464.avatar3dme.core.providers.Providers
+import com.lamnguyen5464.avatar3dme.core.utils.toBase64
 import com.lamnguyen5464.avatar3dme.core.viewer.ModelSurfaceView
 import com.lamnguyen5464.avatar3dme.core.viewer.ObjModel
 import kotlinx.coroutines.CoroutineScope

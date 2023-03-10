@@ -4,9 +4,8 @@
     package="com.lamnguyen5464.avatar3dme">
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- camera access -->
-    <uses-feature android:name="android.hardware.camera" />
-
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:name=".App"
@@ -18,7 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:usesCleartextTraffic="true"
+        >
         <activity
             android:name=".view.ProcessingActivity"
             android:exported="false" />
@@ -36,29 +37,6 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-
-        <activity
-            android:name=".view.ModelViewerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:enableVrMode="@string/gvr_vr_mode_component"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:resizeableActivity="false"
-            android:screenOrientation="landscape">
-            <!-- The VR icon to be used in Daydream Home comes in two parts:
-                 a foreground icon and a background icon.  -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.google.intent.category.CARDBOARD" />
-
-                <!-- The DAYDREAM category should only be declared by Activities that are Daydream
-                     compatible. Daydream compatible apps should typically use the Daydream
-                     controller APIs directly, however in this sample app we instead rely on
-                     Cardboard trigger emulation. -->
-                <category android:name="com.google.intent.category.DAYDREAM" />
             </intent-filter>
         </activity>
     </application>
