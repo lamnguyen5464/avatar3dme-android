@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Material3.Button.ElevatedButton.Filled" parent="@style/Widget.Material3.Button.ElevatedButton">
+        <item name="android:textColor">@color/md_theme_light_onPrimary</item>
+        <item name="android:backgroundTint">@color/md_theme_light_primary</item>
+    </style>
+</resources>
