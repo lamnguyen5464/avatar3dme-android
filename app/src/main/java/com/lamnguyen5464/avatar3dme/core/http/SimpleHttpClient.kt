@@ -8,6 +8,7 @@ import java.net.URL
 
 class SimpleHttpClient {
     fun send(request: SimpleHttpRequest): SimpleHttpResponse {
+        println("[REQ] body: ${request.getBodyString()}")
         return try {
             val url = URL(request.getUrl())
             val urlConnection = url.openConnection() as HttpURLConnection
@@ -22,8 +23,12 @@ class SimpleHttpClient {
             outputStream.close()
             val statusCode = urlConnection.responseCode
 
+
             if (statusCode == 200) {
-                SimpleHttpSuccessResponse(urlConnection.responseMessage)
+                SimpleHttpSuccessResponse(
+                    urlConnection.responseMessage,
+                    urlConnection.inputStream
+                )
             } else {
                 SimpleHttpFailureResponse(statusCode)
             }

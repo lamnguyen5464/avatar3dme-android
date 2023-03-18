@@ -15,9 +15,14 @@ fun Image.toByteArray(): ByteArray {
     return bytes
 }
 
-fun Image.toBitMap(): Bitmap {
-    val bytes = this.toByteArray()
-    return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, null)
+fun Image.toBitMap(): Bitmap? {
+    return try {
+        val bytes = this.toByteArray()
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.size, null)
+    } catch (e: Exception) {
+        println("[ERROR] tobitMap error:${e}")
+        null
+    }
 }
 
 fun Bitmap.toBase64OfPng(): String {

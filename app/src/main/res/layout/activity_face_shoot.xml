@@ -78,4 +78,20 @@
         app:backgroundTint="@color/WHITE" />
 
 
+    <Button
+        android:id="@+id/bt_switch"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:background="@android:color/transparent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/bt_shoot"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/spacing_xlarge"
+        android:layout_marginLeft="@dimen/spacing_medium"
+        android:translationZ="90dp"
+        app:icon="@drawable/baseline_flip_camera_android_24"
+        app:iconTint="@color/md_theme_dark_onBackground"
+        />
+
+
 </RelativeLayout>

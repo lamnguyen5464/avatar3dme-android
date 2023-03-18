@@ -10,9 +10,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -21,47 +19,20 @@ import androidx.core.content.ContextCompat
 import com.lamnguyen5464.avatar3dme.R
 import com.lamnguyen5464.avatar3dme.core.camera.AppCamera
 import com.lamnguyen5464.avatar3dme.core.providers.Providers
+import com.lamnguyen5464.avatar3dme.viewmodel.FaceShootViewModel
 
 class FaceShootActivity : AppCompatActivity() {
 
-    private val camera by lazy {
-        AppCamera(
-            ProcessCameraProvider.getInstance(this),
-            findViewById<PreviewView>(R.id.camera_view),
-            ContextCompat.getMainExecutor(this),
-        ) { image ->
-            Providers.currentProcessingImage = image
-            startActivity(Intent(this.applicationContext, CaptureConfirmationActivity::class.java))
-        }
-    }
+    private val viewModel = FaceShootViewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_face_shoot)
 
-        checkAndRequestCameraPermission()
-
-        findViewById<Button>(R.id.bt_back).setOnClickListener {
-            finish()
-        }
-
-        findViewById<Button>(R.id.bt_shoot).setOnClickListener {
-            camera.capture()
-        }
+        viewModel.checkAndRequestCameraPermission()
+        viewModel.initClickListener()
     }
 
-    private fun checkAndRequestCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.CAMERA),
-                REQUEST_CAMERA_PERMISSION
-            )
-        } else {
-            startCamera()
-        }
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -69,31 +40,15 @@ class FaceShootActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_CAMERA_PERMISSION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startCamera()
-                } else {
-                    // Permission has been denied, show message
-                    Toast.makeText(this, "Camera permission has been denied.", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        }
+        viewModel.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-
-    private fun startCamera() {
-        drawSquareFrame()
-        camera.start(this)
-    }
-
-    private fun drawSquareFrame() {
+    fun drawSquareFrame() {
         val metrics: DisplayMetrics? = resources?.displayMetrics
         val SCREEN_WIDTH = metrics?.widthPixels ?: 0
         val SCREEN_HEIGHT = metrics?.heightPixels ?: 0
 
-        val PADDDING = SCREEN_WIDTH * 1 / 5
+        val PADDDING = SCREEN_WIDTH * 1 / 6
         val EDGE_LENGTH = SCREEN_WIDTH - 2 * PADDDING
 
 
@@ -165,7 +120,4 @@ class FaceShootActivity : AppCompatActivity() {
 
     }
 
-    companion object {
-        private const val REQUEST_CAMERA_PERMISSION = 1
-    }
 }

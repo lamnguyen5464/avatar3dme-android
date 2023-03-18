@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import com.lamnguyen5464.avatar3dme.R
 import com.lamnguyen5464.avatar3dme.core.providers.Providers
 import com.lamnguyen5464.avatar3dme.core.utils.rotate
@@ -21,7 +22,11 @@ class CaptureConfirmationActivity : AppCompatActivity() {
 
         Providers.currentProcessingImage?.let { image ->
             val bitmapImg = image.toBitMap()
-            findViewById<ImageView>(R.id.image_result).setImageBitmap(bitmapImg.rotate(90F))
+            if (bitmapImg == null) {
+                Toast.makeText(this, "Capture image failed!", Toast.LENGTH_LONG).show()
+                return
+            }
+            findViewById<ImageView>(R.id.image_result).setImageBitmap(bitmapImg)
 
             Providers.commonIOScope.launch {
                 println("Start request...")
@@ -29,6 +34,7 @@ class CaptureConfirmationActivity : AppCompatActivity() {
                     bitmapImg.toBase64OfPng()
                 )
                 val res = Providers.httpClient.send(request = req)
+
 
                 println("Res: $res")
             }
