@@ -64,6 +64,8 @@
     <color name="BLACK">#000000</color>
     <color name="BLUE_FUND">#007bff</color>
     <color name="BLACK_SHADOW">#aa000000</color>
+    <color name="BLACK_OVERLAY">#40000000</color>
+    <color name="TRANSPARENT">#00000000</color>
     <color name="OFF_WHITE">#f1f9ea</color>
     <color name="WHITE">#ffffff</color>
 </resources>
