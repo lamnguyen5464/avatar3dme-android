@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/toCaptureViewBt"
-        android:text="to Model View"
+        android:text="to Customize View"
         />
 
 </RelativeLayout>

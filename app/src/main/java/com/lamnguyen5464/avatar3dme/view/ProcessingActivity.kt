@@ -24,7 +24,7 @@ class ProcessingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_processing)
 
         findViewById<Button>(R.id.bt_cancel).setOnClickListener {
-            startActivity(Intent(this, FaceShootActivity::class.java))
+            finish()
         }
 
         // Get the current dark mode state

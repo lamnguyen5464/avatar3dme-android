@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        app:constraintSetEnd="@+id/secondCard"
+        app:constraintSetStart="@id/start"
+        app:duration="1000">
+        <OnSwipe
+            app:dragDirection="dragLeft"
+            app:onTouchUp="autoComplete"
+            app:touchRegionId="@id/cardCenter" />
+        <KeyFrameSet>
+            <KeyPosition
+                app:framePosition="50"
+                app:keyPositionType="pathRelative"
+                app:motionTarget="@+id/cardCenter"
+                app:percentY="0.15" />
+        </KeyFrameSet>
+    </Transition>
+
+    <Transition
+        app:constraintSetEnd="@+id/firstCard"
+        app:constraintSetStart="@id/start"
+        app:duration="1000">
+        <OnSwipe
+            app:dragDirection="dragRight"
+            app:onTouchUp="autoComplete"
+            app:touchRegionId="@id/cardCenter" />
+        <KeyFrameSet>
+            <KeyPosition
+                app:framePosition="50"
+                app:keyPositionType="pathRelative"
+                app:motionTarget="@+id/cardCenter"
+                app:percentY="-0.13" />
+        </KeyFrameSet>
+    </Transition>
+
+    <Transition
+        app:constraintSetEnd="@+id/secondCard"
+        app:constraintSetStart="@id/start"
+        app:duration="1000">
+        <OnClick
+            app:clickAction="transitionToEnd"
+            app:targetId="@id/cardRight1" />
+        <KeyFrameSet>
+            <KeyPosition
+                app:framePosition="50"
+                app:keyPositionType="pathRelative"
+                app:motionTarget="@+id/cardCenter"
+                app:percentY="0.15" />
+        </KeyFrameSet>
+    </Transition>
+
+    <Transition
+        app:constraintSetEnd="@+id/firstCard"
+        app:constraintSetStart="@id/start"
+        app:duration="1000">
+        <OnClick
+            app:clickAction="transitionToEnd"
+            app:targetId="@id/cardLeft1" />
+        <KeyFrameSet>
+            <KeyPosition
+                app:framePosition="50"
+                app:keyPositionType="pathRelative"
+                app:motionTarget="@+id/cardCenter"
+                app:percentY="-0.13" />
+        </KeyFrameSet>
+    </Transition>
+
+
+    <!-- ================= -->
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/cardCenter">
+            <Layout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintCircle="@+id/guide"
+                app:layout_constraintCircleAngle="0"
+                app:layout_constraintCircleRadius="120dp" />
+            <Transform android:elevation="5dp" />
+        </Constraint>
+
+        <Constraint android:id="@+id/cardRight1">
+            <Layout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintCircle="@+id/guide"
+                app:layout_constraintCircleAngle="70"
+                app:layout_constraintCircleRadius="120dp" />
+            <Transform android:elevation="4dp" />
+        </Constraint>
+
+        <Constraint android:id="@+id/cardLeft1">
+            <Layout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintCircle="@+id/guide"
+                app:layout_constraintCircleAngle="290"
+                app:layout_constraintCircleRadius="120dp" />
+            <Transform android:elevation="4dp" />
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/secondCard">
+        <Constraint android:id="@+id/cardCenter">
+            <Layout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintCircle="@+id/guide"
+                app:layout_constraintCircleAngle="290"
+                app:layout_constraintCircleRadius="120dp" />
+            <Transform android:elevation="4dp" />
+        </Constraint>
+
+        <Constraint android:id="@+id/cardRight1">
+            <Layout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintCircle="@+id/guide"
+                app:layout_constraintCircleAngle="0"
+                app:layout_constraintCircleRadius="120dp" />
+            <Transform android:elevation="5dp" />
+        </Constraint>
+
+        <Constraint android:id="@+id/cardLeft1">
+            <Layout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintCircle="@+id/guide"
+                app:layout_constraintCircleAngle="220"
+                app:layout_constraintCircleRadius="300dp" />
+            <Transform android:elevation="3dp" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/firstCard">
+        <Constraint android:id="@+id/cardCenter">
+            <Layout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintCircle="@+id/guide"
+                app:layout_constraintCircleAngle="70"
+                app:layout_constraintCircleRadius="120dp" />
+            <Transform android:elevation="4dp" />
+        </Constraint>
+
+        <Constraint android:id="@+id/cardRight1">
+            <Layout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintCircle="@+id/guide"
+                app:layout_constraintCircleAngle="140"
+                app:layout_constraintCircleRadius="120dp" />
+            <Transform android:elevation="3dp" />
+        </Constraint>
+
+        <Constraint android:id="@+id/cardLeft1">
+            <Layout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintCircle="@+id/guide"
+                app:layout_constraintCircleAngle="0"
+                app:layout_constraintCircleRadius="120dp" />
+            <Transform android:elevation="5dp" />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

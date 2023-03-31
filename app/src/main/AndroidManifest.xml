@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- camera access -->
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -17,9 +18,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:targetApi="31"
         android:usesCleartextTraffic="true"
-        >
+        tools:targetApi="31">
+        <activity
+            android:name=".view.CircularCardsDemoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.CustomizeActivity"
+            android:exported="false" />
         <activity
             android:name=".view.ProcessingActivity"
             android:exported="false" />
@@ -29,7 +35,7 @@
         <activity
             android:name=".view.FaceShootActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.MainActivity"
             android:exported="true">
