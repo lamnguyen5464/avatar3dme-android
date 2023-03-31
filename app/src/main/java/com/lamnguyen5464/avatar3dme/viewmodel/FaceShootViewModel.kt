@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.lamnguyen5464.avatar3dme.R
 import com.lamnguyen5464.avatar3dme.core.camera.AppCamera
 import com.lamnguyen5464.avatar3dme.core.providers.Providers
+import com.lamnguyen5464.avatar3dme.core.utils.toBitMap
 import com.lamnguyen5464.avatar3dme.view.CaptureConfirmationActivity
 import com.lamnguyen5464.avatar3dme.view.FaceShootActivity
 
@@ -24,7 +25,7 @@ class FaceShootViewModel(private val activity: FaceShootActivity) {
             activity,
             ContextCompat.getMainExecutor(activity),
         ) { image ->
-            Providers.currentProcessingImage = image
+            Providers.currentProcessingImage = image.toBitMap()
             activity.startActivity(
                 Intent(
                     activity.applicationContext,

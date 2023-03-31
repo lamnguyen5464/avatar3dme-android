@@ -20,4 +20,5 @@ class SimpleHttpSuccessResponse(
     }
 }
 
-class SimpleHttpFailureResponse(status: Int = -1) : SimpleHttpResponse(status)
+class SimpleHttpFailureResponse(status: Int = -1, val exception: Throwable? = null) :
+    SimpleHttpResponse(status)

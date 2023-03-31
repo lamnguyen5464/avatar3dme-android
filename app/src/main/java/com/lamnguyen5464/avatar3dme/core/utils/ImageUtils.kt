@@ -27,7 +27,7 @@ fun Image.toBitMap(): Bitmap? {
 
 fun Bitmap.toBase64OfPng(): String {
     val outputStream = ByteArrayOutputStream()
-    this.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+    this.compress(Bitmap.CompressFormat.JPEG, 25, outputStream)
     val byteArray: ByteArray = outputStream.toByteArray()
     return Base64.encodeToString(byteArray, Base64.DEFAULT)
 }

@@ -19,9 +19,9 @@ import android.opengl.Matrix
  */
 class Light(private var lightPosInWorldSpace: FloatArray) {
     val positionInEyeSpace = FloatArray(4)
-    var ambientColor = floatArrayOf(0.9f, 0.9f, 0.9f, 0.1f)
-    var diffuseColor = floatArrayOf(0.9f, 0.9f, 0.9f, 0.1f)
-    var specularColor = floatArrayOf(0.9f, 0.9f, 0.9f, 0.1f)
+    var ambientColor = floatArrayOf(1.0f, 1.0f, 1.0f, 1.0f)
+    var diffuseColor = floatArrayOf(0.8f, 0.8f, 0.8f, 1.0f)
+    var specularColor = floatArrayOf(0.8f, 0.8f, 0.8f, 1.0f)
 
     fun setPosition(position: FloatArray) {
         lightPosInWorldSpace = position

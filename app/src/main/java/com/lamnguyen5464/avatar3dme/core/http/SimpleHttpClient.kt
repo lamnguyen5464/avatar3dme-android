@@ -8,6 +8,7 @@ import java.net.URL
 
 class SimpleHttpClient {
     fun send(request: SimpleHttpRequest): SimpleHttpResponse {
+        println("[HTTP] start request")
         return try {
             val url = URL(request.getUrl())
             val urlConnection = url.openConnection() as HttpURLConnection
@@ -34,7 +35,7 @@ class SimpleHttpClient {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            SimpleHttpFailureResponse()
+            SimpleHttpFailureResponse(-1, e)
         }
 
     }

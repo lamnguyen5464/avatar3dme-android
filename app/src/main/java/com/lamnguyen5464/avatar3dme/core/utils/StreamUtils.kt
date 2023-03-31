@@ -10,7 +10,7 @@ fun InputStream.toStringData(): String? {
         val bufferedReader = BufferedReader(InputStreamReader(this))
         val stringBuilder = StringBuilder()
         bufferedReader.forEachLine { line ->
-            stringBuilder.append(line).append("\n")
+            stringBuilder.append(line)
         }
         stringBuilder.toString()
     } catch (e: Exception) {

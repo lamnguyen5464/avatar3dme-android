@@ -18,29 +18,13 @@ class CaptureConfirmationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_capture_confirmation)
 
-
         Providers.currentProcessingImage?.let { image ->
-            val bitmapImg = image.toBitMap()
-            if (bitmapImg == null) {
-                Toast.makeText(this, "Capture image failed!", Toast.LENGTH_LONG).show()
-                return
-            }
-            findViewById<ImageView>(R.id.image_result).setImageBitmap(bitmapImg)
+            findViewById<ImageView>(R.id.image_result).setImageBitmap(image)
 
-            Providers.commonIOScope.launch {
-                println("Start request...")
-                val req = RequestFactory.createUploadBase64Request(
-                    bitmapImg.toBase64OfPng()
-                )
-                val res = Providers.httpClient.send(request = req)
-
-
-                println("Res: $res")
-            }
         }
 
-
         findViewById<Button>(R.id.bt_retry).setOnClickListener {
+            Providers.currentProcessingImage = null
             finish()
         }
 

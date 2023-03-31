@@ -17,16 +17,23 @@ import com.airbnb.lottie.SimpleColorFilter
 import com.airbnb.lottie.model.KeyPath
 import com.airbnb.lottie.value.LottieValueCallback
 import com.lamnguyen5464.avatar3dme.R
+import com.lamnguyen5464.avatar3dme.viewmodel.ProcessingViewModel
 
 class ProcessingActivity : AppCompatActivity() {
+
+    private val viewModel = ProcessingViewModel(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_processing)
 
-        findViewById<Button>(R.id.bt_cancel).setOnClickListener {
-            finish()
-        }
+        viewModel.init()
 
+        decorView()
+
+    }
+
+    private fun decorView() {
         // Get the current dark mode state
         val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
 

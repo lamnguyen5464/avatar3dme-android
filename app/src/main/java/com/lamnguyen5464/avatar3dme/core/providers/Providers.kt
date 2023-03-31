@@ -1,15 +1,19 @@
 package com.lamnguyen5464.avatar3dme.core.providers
 
+import android.graphics.Bitmap
 import android.media.Image
 import com.lamnguyen5464.avatar3dme.core.http.SimpleHttpClient
 import com.lamnguyen5464.avatar3dme.core.viewer.Model
+import com.lamnguyen5464.avatar3dme.core.viewer.ObjModel
+import com.lamnguyen5464.avatar3dme.feature.CommonUseCase
+import com.lamnguyen5464.avatar3dme.feature.SyncTokenUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
 object Providers {
-    var currentProcessingImage: Image? = null
-    var currentModel: Model? = null
+    var currentProcessingImage: Bitmap? = null
+    var currentModel: ObjModel? = null
     var simpleToken: String? = null
 
     val httpClient by lazy {
@@ -17,5 +21,10 @@ object Providers {
     }
     val commonIOScope by lazy {
         CoroutineScope(Dispatchers.IO + Job())
+    }
+    val commonSyncProcess by lazy {
+        CommonUseCase.of(
+            SyncTokenUseCase.instance
+        )
     }
 }

@@ -1,18 +1,23 @@
 package com.lamnguyen5464.avatar3dme.viewmodel
 
-import android.widget.Button
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.card.MaterialCardView
 import com.lamnguyen5464.avatar3dme.R
+import com.lamnguyen5464.avatar3dme.core.http.SimpleHttpSuccessResponse
+import com.lamnguyen5464.avatar3dme.core.providers.Providers
+import com.lamnguyen5464.avatar3dme.core.viewer.ObjModel
+import com.lamnguyen5464.avatar3dme.feature.RequestFactory
 import com.lamnguyen5464.avatar3dme.model.CreditCardModel
 import com.lamnguyen5464.avatar3dme.model.CreditCardsModel
 import com.lamnguyen5464.avatar3dme.view.CustomizeActivity
+import kotlinx.coroutines.launch
 
-class CreditCardsViewModel(private val activity: CustomizeActivity) {
+class CustomizeViewModel(private val activity: CustomizeActivity) {
 
     private val stream = MutableLiveData<CreditCardsModel>()
+
+    val modelState = MutableLiveData<ObjModel>()
 
     val modelStream: LiveData<CreditCardsModel>
         get() = stream
@@ -32,8 +37,17 @@ class CreditCardsViewModel(private val activity: CustomizeActivity) {
     private val cardOneRight
         get() = data[(currentIndex + 2) % data.size]
 
-    init {
+    private fun getMockModel() =
+        activity.applicationContext.resources.openRawResource(R.raw.default_face).let {
+            val model = ObjModel(it)
+            Providers.currentModel = model
+            it.close()
+            model
+        }
+
+    fun init() {
         updateCards()
+        modelState.value = Providers.currentModel ?: getMockModel()
     }
 
     fun swipeRight() {
@@ -53,15 +67,44 @@ class CreditCardsViewModel(private val activity: CustomizeActivity) {
     fun initClickListener() {
         activity.findViewById<MaterialCardView>(R.id.cardCenter).setOnClickListener {
             println("Applying accesory #" + cardCenter.accessoryID)
-            //TODO: apply accessory to face
         }
     }
 
+    private fun requestDecor() = Providers.commonIOScope.launch {
+        val request = RequestFactory.createDecorRequest(MOCK_ITEMS.random())
+        when (val response = Providers.httpClient.send(request)) {
+            is SimpleHttpSuccessResponse -> {
+                val model = ObjModel(response.inputStream)
+                activity.runOnUiThread {
+                    modelState.value = model
+                }
+            }
+
+            else -> {
+                // TODO: handle exception here
+            }
+        }
+    }
+
+
     private fun updateCards() {
+        println("Update card")
+        this.requestDecor()
         stream.value = CreditCardsModel(
             cardOneLeft = cardOneLeft,
             cardCenter = cardCenter,
             cardOneRight = cardOneRight
+        )
+    }
+
+    companion object {
+        private val MOCK_ITEMS = listOf(
+            "hair_female_1",
+            "hair_female_2",
+            "hair_male_0",
+            "hair_male_1",
+            "hair_male_2",
+            "hair_male_3",
         )
     }
 }
