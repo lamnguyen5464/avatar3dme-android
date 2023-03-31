@@ -8,7 +8,6 @@ import java.net.URL
 
 class SimpleHttpClient {
     fun send(request: SimpleHttpRequest): SimpleHttpResponse {
-        println("[REQ] body: ${request.getBodyString()}")
         return try {
             val url = URL(request.getUrl())
             val urlConnection = url.openConnection() as HttpURLConnection
@@ -17,12 +16,13 @@ class SimpleHttpClient {
 
             request.getHeaders().forEach { urlConnection.setRequestProperty(it.key, it.value) }
 
-            val outputStream: OutputStream = BufferedOutputStream(urlConnection.outputStream)
-            outputStream.write(request.getBodyString().encodeToByteArray())
-            outputStream.flush()
-            outputStream.close()
+            if (request.getMethod() != "GET") {
+                val outputStream: OutputStream = BufferedOutputStream(urlConnection.outputStream)
+                outputStream.write(request.getBodyString().encodeToByteArray())
+                outputStream.flush()
+                outputStream.close()
+            }
             val statusCode = urlConnection.responseCode
-
 
             if (statusCode == 200) {
                 SimpleHttpSuccessResponse(

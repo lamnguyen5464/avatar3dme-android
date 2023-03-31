@@ -10,6 +10,7 @@ import kotlinx.coroutines.Job
 object Providers {
     var currentProcessingImage: Image? = null
     var currentModel: Model? = null
+    var simpleToken: String? = null
 
     val httpClient by lazy {
         SimpleHttpClient()

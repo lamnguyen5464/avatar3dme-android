@@ -8,10 +8,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.lamnguyen5464.avatar3dme.R
 import com.lamnguyen5464.avatar3dme.core.providers.Providers
-import com.lamnguyen5464.avatar3dme.core.utils.rotate
 import com.lamnguyen5464.avatar3dme.core.utils.toBase64OfPng
 import com.lamnguyen5464.avatar3dme.core.utils.toBitMap
-import com.lamnguyen5464.avatar3dme.feature.Face3DService
+import com.lamnguyen5464.avatar3dme.feature.RequestFactory
 import kotlinx.coroutines.launch
 
 class CaptureConfirmationActivity : AppCompatActivity() {
@@ -30,7 +29,7 @@ class CaptureConfirmationActivity : AppCompatActivity() {
 
             Providers.commonIOScope.launch {
                 println("Start request...")
-                val req = Face3DService.createUploadBase64Request(
+                val req = RequestFactory.createUploadBase64Request(
                     bitmapImg.toBase64OfPng()
                 )
                 val res = Providers.httpClient.send(request = req)
