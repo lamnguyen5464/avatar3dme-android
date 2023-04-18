@@ -1,7 +1,9 @@
 package com.lamnguyen5464.avatar3dme.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.RelativeLayout
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.TransitionAdapter
@@ -52,6 +54,14 @@ class CustomizeActivity : AppCompatActivity() {
             }
 
         viewModel.initClickListener()
+
+        findViewById<Button>(R.id.bt_undo_custom).setOnClickListener {
+            //TODO: Return last selection
+        }
+
+        findViewById<Button>(R.id.bt_save_custom).setOnClickListener {
+            //TODO: Transition to result display screen
+        }
 
         val currentCard = findViewById<MaterialCardView>(R.id.cardCenter)
         motionLayout.setTransitionListener(object : TransitionAdapter() {

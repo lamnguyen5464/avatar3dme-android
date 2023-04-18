@@ -7,6 +7,28 @@
     android:layout_height="match_parent"
     tools:context=".view.CustomizeActivity">
 
+    <Button
+        android:id="@+id/bt_undo_custom"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="UNDO"
+        android:layout_margin="@dimen/spacing_small"
+        android:textColor="@color/md_theme_dark_onBackground"/>
+
+    <Button
+        android:id="@+id/bt_save_custom"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="SAVE"
+        android:layout_margin="@dimen/spacing_small"
+        android:textColor="@color/md_theme_dark_primary"/>
+
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"

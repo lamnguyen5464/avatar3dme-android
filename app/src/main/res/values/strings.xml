@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Avatar3dMe</string>
+
+    //Headings
+    <string name="heading_one">Discover your perfect look</string>
+    <string name="heading_two">Try-ons made easy</string>
+    <string name="heading_three">The barber\'s your best friend</string>
+    <string name="heading_four">Snap and go</string>
+
+    //Description
+    <string name="desc_one">Don\'t know which haircut or glasses suit you? Don\'t worry! Our app is here to help you out.</string>
+    <string name="desc_two">Say goodbye to imagining your look and say hello to trying on various hairstyles and accessories in seconds.</string>
+    <string name="desc_three">When you find your perfect look, simply send it to us and our professional barbers will take care of the rest.</string>
+    <string name="desc_four">With just one snap of your face, get ready to experience our amazing features and step up your style game with ease.</string>
+
 </resources>
