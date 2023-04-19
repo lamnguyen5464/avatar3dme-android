@@ -23,10 +23,11 @@ class CustomizeViewModel(private val activity: CustomizeActivity) {
         get() = stream
 
     private val data = listOf(
-        CreditCardModel(thumbnailURI = R.drawable.hair_1, accessoryID = "1"),
-        CreditCardModel(thumbnailURI = R.drawable.hair_2, accessoryID = "2"),
-        CreditCardModel(thumbnailURI = R.drawable.hair_3, accessoryID = "3"),
-        CreditCardModel(thumbnailURI = R.drawable.hair_4, accessoryID = "4"),
+        CreditCardModel(thumbnailURI = R.drawable.hair_male_0, accessoryID = "hair_male_0"),
+        CreditCardModel(thumbnailURI = R.drawable.hair_male_1, accessoryID = "hair_male_1"),
+        CreditCardModel(thumbnailURI = R.drawable.hair_male_2, accessoryID = "hair_male_2"),
+        CreditCardModel(thumbnailURI = R.drawable.hair_male_3, accessoryID = "hair_male_3"),
+        CreditCardModel(thumbnailURI = R.drawable.hair_female_1, accessoryID = "hair_female_1"),
     )
     private var currentIndex = 0
 
@@ -70,8 +71,8 @@ class CustomizeViewModel(private val activity: CustomizeActivity) {
         }
     }
 
-    private fun requestDecor() = Providers.commonIOScope.launch {
-        val request = RequestFactory.createDecorRequest(MOCK_ITEMS.random())
+    private fun requestDecor(accessoryID: String) = Providers.commonIOScope.launch {
+        val request = RequestFactory.createDecorRequest(accessoryID)
         when (val response = Providers.httpClient.send(request)) {
             is SimpleHttpSuccessResponse -> {
                 val model = ObjModel(response.inputStream)
@@ -89,7 +90,7 @@ class CustomizeViewModel(private val activity: CustomizeActivity) {
 
     private fun updateCards() {
         println("Update card")
-        this.requestDecor()
+        this.requestDecor(cardCenter.accessoryID)
         stream.value = CreditCardsModel(
             cardOneLeft = cardOneLeft,
             cardCenter = cardCenter,
