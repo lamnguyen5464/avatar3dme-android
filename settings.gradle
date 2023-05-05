@@ -7,3 +7,10 @@ pluginManagement {
 }
 rootProject.name = "Avatar3dMe"
 include ':app'
+
+setBinding(new Binding([gradle:this]))
+
+evaluate(new File(
+        settingsDir.absoluteFile,
+        'flutter_integration/.android/include_flutter.groovy'
+))

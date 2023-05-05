@@ -16,6 +16,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            // Filter for architectures supported by Flutter.
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
+
     }
 
     buildTypes {
@@ -31,6 +37,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
 }
 
 dependencies {
@@ -58,4 +65,7 @@ dependencies {
     implementation "com.airbnb.android:lottie:6.0.0"
 
     implementation 'com.google.vr:sdk-base:1.190.0'
+
+    // flutter integration
+    implementation project(':flutter')
 }

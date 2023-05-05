@@ -14,6 +14,7 @@ import com.lamnguyen5464.avatar3dme.core.utils.toStringData
 import com.lamnguyen5464.avatar3dme.core.viewer.ModelSurfaceView
 import com.lamnguyen5464.avatar3dme.core.viewer.ObjModel
 import com.lamnguyen5464.avatar3dme.feature.RequestFactory
+import io.flutter.embedding.android.FlutterActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -47,6 +48,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, CustomizeActivity::class.java))
         }
 //        startActivity(Intent(this, FaceShootActivity::class.java))
+
+        startActivity(
+            FlutterActivity.createDefaultIntent(this)
+        )
+
 
     }
 }
