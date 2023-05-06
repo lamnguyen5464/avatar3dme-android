@@ -1,6 +1,5 @@
 package com.lamnguyen5464.avatar3dme.view
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -10,15 +9,11 @@ import androidx.constraintlayout.motion.widget.TransitionAdapter
 import androidx.lifecycle.Observer
 import com.google.android.material.card.MaterialCardView
 import com.lamnguyen5464.avatar3dme.R
-import com.lamnguyen5464.avatar3dme.core.providers.Providers
 import com.lamnguyen5464.avatar3dme.core.viewer.ModelSurfaceView
 import com.lamnguyen5464.avatar3dme.core.viewer.ObjModel
 import com.lamnguyen5464.avatar3dme.model.CreditCardsModel
 import com.lamnguyen5464.avatar3dme.viewmodel.CustomizeViewModel
 import kotlinx.android.synthetic.main.activity_customize.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 
 class CustomizeActivity : AppCompatActivity() {
 
@@ -26,12 +21,12 @@ class CustomizeActivity : AppCompatActivity() {
 
     private val onUpdateModel = object : Observer<ObjModel> {
         private var modelView: ModelSurfaceView? = null
-        override fun onChanged(model: ObjModel?) {
+        override fun onChanged(value: ObjModel) {
             runOnUiThread {
                 val containerView =
                     findViewById<RelativeLayout>(R.id.customize_container)
                 containerView.removeView(modelView)
-                modelView = ModelSurfaceView(applicationContext, model)
+                modelView = ModelSurfaceView(applicationContext, value)
                 containerView.addView(modelView, 0)
             }
         }

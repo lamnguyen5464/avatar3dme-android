@@ -11,6 +11,10 @@
         <option name="gradleJvm" value="jbr-17" />
         <option name="modules">
           <set>
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.13/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_android-0.8.6+11/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_android-2.0.27/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/social_share-2.3.1/android" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/flutter_integration/.android/Flutter" />

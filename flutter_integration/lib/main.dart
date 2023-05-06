@@ -1,112 +1,384 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:async';
+import 'package:screenshot/screenshot.dart';
+import 'package:social_share/social_share.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
-  // This widget is the root of your application.
+class _MyAppState extends State<MyApp> {
+  String facebookId = "xxxxxxxx";
+
+  var imageBackground = "image-background.jpg";
+  var videoBackground = "video-background.mp4";
+  String imageBackgroundPath = "";
+  String videoBackgroundPath = "";
+
+  @override
+  void initState() {
+    super.initState();
+    copyBundleAssets();
+  }
+
+  Future<void> copyBundleAssets() async {
+    imageBackgroundPath = await copyImage(imageBackground);
+    videoBackgroundPath = await copyImage(videoBackground);
+  }
+
+  Future<String> copyImage(String filename) async {
+    final tempDir = await getTemporaryDirectory();
+    ByteData bytes = await rootBundle.load("assets/$filename");
+    final assetPath = '${tempDir.path}/$filename';
+    File file = await File(assetPath).create();
+    await file.writeAsBytes(bytes.buffer.asUint8List());
+    return file.path;
+  }
+
+  Future<String?> pickImage() async {
+    final file = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    var path = file?.path;
+    if (path == null) {
+      return null;
+    }
+    return file?.path;
+  }
+
+  Future<String?> screenshot() async {
+    var data = await screenshotController.capture();
+    if (data == null) {
+      return null;
+    }
+    final tempDir = await getTemporaryDirectory();
+    final assetPath = '${tempDir.path}/temp.png';
+    File file = await File(assetPath).create();
+    await file.writeAsBytes(data);
+    return file.path;
+  }
+
+  ScreenshotController screenshotController = ScreenshotController();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or press Run > Flutter Hot Reload in a Flutter IDE). Notice that the
-        // counter didn't reset back to zero; the application is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Social Share'),
+        ),
+        body: Screenshot(
+          controller: screenshotController,
+          child: Container(
+            color: Colors.white,
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Instagram",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      ElevatedButton(
+                        child: Icon(Icons.gradient),
+                        onPressed: () async {
+                          var path = await pickImage();
+                          if (path == null) {
+                            return;
+                          }
+                          SocialShare.shareInstagramStory(
+                            appId: facebookId,
+                            imagePath: path,
+                            backgroundTopColor: "#ffffff",
+                            backgroundBottomColor: "#000000",
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        child: Icon(Icons.image),
+                        onPressed: () async {
+                          var path = await pickImage();
+                          if (path == null) {
+                            return;
+                          }
+                          SocialShare.shareInstagramStory(
+                            appId: facebookId,
+                            imagePath: path,
+                            backgroundResourcePath: imageBackgroundPath,
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        child: Icon(Icons.videocam),
+                        onPressed: () async {
+                          var path = await screenshot();
+                          if (path == null) {
+                            return;
+                          }
+                          SocialShare.shareInstagramStory(
+                            appId: facebookId,
+                            imagePath: path,
+                            backgroundResourcePath: videoBackgroundPath,
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Facebook",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      ElevatedButton(
+                        child: Icon(Icons.gradient),
+                        onPressed: () async {
+                          var path = await pickImage();
+                          if (path == null) {
+                            return;
+                          }
+                          SocialShare.shareFacebookStory(
+                            appId: facebookId,
+                            imagePath: path,
+                            backgroundTopColor: "#ffffff",
+                            backgroundBottomColor: "#000000",
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        child: Icon(Icons.image),
+                        onPressed: () async {
+                          var path = await pickImage();
+                          if (path == null) {
+                            return;
+                          }
+                          SocialShare.shareFacebookStory(
+                            appId: facebookId,
+                            imagePath: path,
+                            backgroundResourcePath: imageBackgroundPath,
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        child: Icon(Icons.videocam),
+                        onPressed: () async {
+                          var path = await screenshot();
+                          if (path == null) {
+                            return;
+                          }
+                          await SocialShare.shareFacebookStory(
+                            appId: facebookId,
+                            imagePath: path,
+                            backgroundResourcePath: videoBackgroundPath,
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Twitter",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      ElevatedButton(
+                        child: Icon(Icons.text_fields),
+                        onPressed: () async {
+                          SocialShare.shareTwitter(
+                            "This is Social Share twitter example with link.  ",
+                            hashtags: [
+                              "SocialSharePlugin",
+                              "world",
+                              "foo",
+                              "bar"
+                            ],
+                            url: "https://google.com/hello",
+                            trailingText: "cool!!",
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Clipboard",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      ElevatedButton(
+                        child: Icon(Icons.image),
+                        onPressed: () async {
+                          SocialShare.copyToClipboard(
+                            image: await screenshot(),
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        child: Icon(Icons.text_fields),
+                        onPressed: () async {
+                          SocialShare.copyToClipboard(
+                            text: "This is Social Share plugin",
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "SMS",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      ElevatedButton(
+                        child: Icon(Icons.text_fields),
+                        onPressed: () async {
+                          SocialShare.shareSms(
+                            "This is Social Share Sms example",
+                            url: "https://google.com/",
+                            trailingText: "\nhello",
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Share Options",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      ElevatedButton(
+                        child: Icon(Icons.text_fields),
+                        onPressed: () async {
+                          SocialShare.shareOptions("Hello world").then((data) {
+                            print(data);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Whatsapp",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      ElevatedButton(
+                        onPressed: () async {
+                          SocialShare.shareWhatsapp(
+                            "Hello World \n https://google.com",
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                        child: Icon(Icons.text_fields),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Telegram",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      ElevatedButton(
+                        onPressed: () async {
+                          SocialShare.shareTelegram(
+                            "Hello World \n https://google.com",
+                          ).then((data) {
+                            print(data);
+                          });
+                        },
+                        child: Icon(Icons.text_fields),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Get all Apps",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      ElevatedButton(
+                        child: Icon(Icons.text_fields),
+                        onPressed: () async {
+                          SocialShare.checkInstalledAppsForShare().then((data) {
+                            print(data.toString());
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
