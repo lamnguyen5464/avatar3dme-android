@@ -1,24 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="250dp"
+    android:background="@color/WHITE"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <LinearLayout
-        android:id="@+id/bottom_sheet"
+    <fragment
+        android:id="@+id/flutterfragment"
+        android:name="io.flutter.embedding.android.FlutterFragment"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@color/WHITE"
-        android:orientation="vertical"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="0dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-        <fragment
-            android:id="@+id/flutterfragment"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:name="io.flutter.embedding.android.FlutterFragment"
-            />
-    </LinearLayout>
+        android:layout_height="250dp" />
 </LinearLayout>

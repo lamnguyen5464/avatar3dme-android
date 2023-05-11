@@ -6,6 +6,7 @@ import com.lamnguyen5464.avatar3dme.core.http.SimpleHttpClient
 import com.lamnguyen5464.avatar3dme.core.viewer.Model
 import com.lamnguyen5464.avatar3dme.core.viewer.ObjModel
 import com.lamnguyen5464.avatar3dme.feature.CommonUseCase
+import com.lamnguyen5464.avatar3dme.feature.PreloadFlutterEngine
 import com.lamnguyen5464.avatar3dme.feature.SyncTokenUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,9 +23,15 @@ object Providers {
     val commonIOScope by lazy {
         CoroutineScope(Dispatchers.IO + Job())
     }
+
+    val commonMainScope by lazy {
+        CoroutineScope(Dispatchers.Main + Job())
+    }
+
     val commonSyncProcess by lazy {
         CommonUseCase.of(
-            SyncTokenUseCase.instance
+            SyncTokenUseCase.instance,
+            PreloadFlutterEngine.instance
         )
     }
 }
