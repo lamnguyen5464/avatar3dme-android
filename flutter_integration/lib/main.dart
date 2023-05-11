@@ -71,14 +71,15 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Social Share'),
-        ),
+        // appBar: AppBar(
+        //   title: const Text('Social Share'),
+        // ),
         body: Screenshot(
           controller: screenshotController,
           child: Container(
             color: Colors.white,
             alignment: Alignment.center,
+            height: 200,
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -87,7 +88,7 @@ class _MyAppState extends State<MyApp> {
                 children: [
                   Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: Text(
                           "Instagram",
                           style: TextStyle(fontSize: 16),
@@ -95,7 +96,7 @@ class _MyAppState extends State<MyApp> {
                       ),
                       SizedBox(width: 40),
                       ElevatedButton(
-                        child: Icon(Icons.gradient),
+                        child: Icon(Icons.image),
                         onPressed: () async {
                           var path = await pickImage();
                           if (path == null) {

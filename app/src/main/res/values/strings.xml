@@ -12,5 +12,7 @@
     <string name="desc_two">Say goodbye to imagining your look and say hello to trying on various hairstyles and accessories in seconds.</string>
     <string name="desc_three">When you find your perfect look, simply send it to us and our professional barbers will take care of the rest.</string>
     <string name="desc_four">With just one snap of your face, get ready to experience our amazing features and step up your style game with ease.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

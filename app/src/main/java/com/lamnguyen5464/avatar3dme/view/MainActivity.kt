@@ -7,6 +7,8 @@ import android.preference.PreferenceManager
 import android.widget.Button
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.lamnguyen5464.avatar3dme.R
 import com.lamnguyen5464.avatar3dme.core.http.SimpleHttpSuccessResponse
 import com.lamnguyen5464.avatar3dme.core.providers.Providers
@@ -15,6 +17,7 @@ import com.lamnguyen5464.avatar3dme.core.viewer.ModelSurfaceView
 import com.lamnguyen5464.avatar3dme.core.viewer.ObjModel
 import com.lamnguyen5464.avatar3dme.feature.RequestFactory
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,14 +48,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.toModelViewBt).setOnClickListener {
-            startActivity(Intent(this, CustomizeActivity::class.java))
+//            startActivity(Intent(this, CustomizeActivity::class.java))
+
+            val bottomSheetShare = SharePlaygroundFragment()
+            bottomSheetShare.show(supportFragmentManager, SharePlaygroundFragment.TAG)
+
         }
 //        startActivity(Intent(this, FaceShootActivity::class.java))
 
-        startActivity(
-            FlutterActivity.createDefaultIntent(this)
-        )
-
+//        startActivity(
+//            FlutterActivity.createDefaultIntent(this)
+//        )
+//        supportFragmentManager.beginTransaction()
+//            .add(R.id.flutterfragment, FlutterFragment.createDefault(), "tag")
+//            .commit()
 
     }
 }
