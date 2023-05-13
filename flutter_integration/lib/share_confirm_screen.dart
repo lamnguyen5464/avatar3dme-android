@@ -21,6 +21,10 @@ class _ShareConfirmScreenState extends State<ShareConfirmScreen> {
     _fetchImageUrl();
   }
 
+  void _doShare(String content, String imagePath) {
+    SocialShare.shareOptions(content, imagePath: imagePath);
+  }
+
   Future<void> _fetchImageUrl() async {
     const platform = MethodChannel('channel.common');
 
@@ -40,23 +44,79 @@ class _ShareConfirmScreenState extends State<ShareConfirmScreen> {
     });
   }
 
+  Widget _renderImage(double screenWidth) {
+    ImageProvider? localImage =
+        _localImageUrl != null ? FileImage(File(_localImageUrl!)) : null;
+
+    const ImageProvider placeHolderImage = NetworkImage(
+        "https://www.genius100visions.com/wp-content/uploads/2017/09/placeholder-vertical.jpg");
+
+    return Container(
+      width: screenWidth,
+      height: 300,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        image: DecorationImage(
+          image: localImage ?? placeHolderImage,
+          fit: BoxFit.fitHeight,
+          alignment: Alignment.center,
+        ),
+      ),
+    );
+  }
+
+  Widget _renderTitle() {
+    return const Text(
+      "Share it!",
+      style: TextStyle(
+          fontWeight: FontWeight.bold, fontSize: 24, color: Colors.black87),
+    );
+  }
+
   Widget _renderContent() {
-    if (_localImageUrl != null) {
-      return Image.file(
-        File(_localImageUrl!),
-        fit: BoxFit.cover,
-      );
-    }
-    return const Placeholder();
+    return const Text(
+      "If you're happy with \nyour hair cut, share it with us \nand spread the joy",
+      style: TextStyle(
+          fontWeight: FontWeight.normal, fontSize: 16, color: Colors.black54),
+      textAlign: TextAlign.center,
+      maxLines: 5,
+    );
+  }
+
+  Widget _renderCTA() {
+    return ElevatedButton(
+      onPressed: () {
+        _doShare("", _localImageUrl ?? "");
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF4b57a9),
+        fixedSize: const Size(200, 32)
+      ),
+      child: const Text('Share'),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    double screenHeight = size.height;
+    double screenWidth = size.width;
+
     return Container(
       color: Colors.white,
-      constraints: const BoxConstraints.expand(
-          width: double.infinity, height: double.infinity),
-      child: _renderContent(),
+      width: screenWidth,
+      height: screenHeight,
+      child: Wrap(
+        spacing: 8,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        direction: Axis.vertical,
+        children: [
+          _renderImage(screenWidth),
+          _renderTitle(),
+          _renderContent(),
+          _renderCTA()
+        ],
+      ),
     );
   }
 }

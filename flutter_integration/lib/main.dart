@@ -8,9 +8,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ShareConfirmScreen();
+    return const MaterialApp(
+      home: Scaffold(
+        body: ShareConfirmScreen(),
+      ),
+    );
   }
 }
-
-
-
