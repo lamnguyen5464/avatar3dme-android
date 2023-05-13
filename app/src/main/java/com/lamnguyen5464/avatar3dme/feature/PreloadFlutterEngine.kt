@@ -1,5 +1,6 @@
 package com.lamnguyen5464.avatar3dme.feature
 
+import com.google.vr.cardboard.ThreadUtils.runOnUiThread
 import com.lamnguyen5464.avatar3dme.App
 import com.lamnguyen5464.avatar3dme.core.http.SimpleHttpSuccessResponse
 import com.lamnguyen5464.avatar3dme.core.providers.Providers
@@ -19,7 +20,7 @@ class PreloadFlutterEngine : CommonUseCase {
     }
 
     override fun execute() {
-        Providers.commonMainScope.launch {
+        runOnUiThread {
             val flutterEngine = FlutterEngine(App.instance.applicationContext)
 
             // Start executing Dart code in the FlutterEngine.

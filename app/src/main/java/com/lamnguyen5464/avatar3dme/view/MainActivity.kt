@@ -12,6 +12,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.lamnguyen5464.avatar3dme.R
 import com.lamnguyen5464.avatar3dme.core.http.SimpleHttpSuccessResponse
 import com.lamnguyen5464.avatar3dme.core.providers.Providers
+import com.lamnguyen5464.avatar3dme.core.utils.FileUtils
+import com.lamnguyen5464.avatar3dme.core.utils.ScreenShotUtils
 import com.lamnguyen5464.avatar3dme.core.utils.toStringData
 import com.lamnguyen5464.avatar3dme.core.viewer.ModelSurfaceView
 import com.lamnguyen5464.avatar3dme.core.viewer.ObjModel
@@ -53,15 +55,16 @@ class MainActivity : AppCompatActivity() {
             val bottomSheetShare = SharePlaygroundFragment()
             bottomSheetShare.show(supportFragmentManager, SharePlaygroundFragment.TAG)
 
+            ScreenShotUtils.take(this)?.let { img ->
+                FileUtils.saveBitmap(
+                    bitmap = img,
+                    context = applicationContext
+                )
+            }
         }
-//        startActivity(Intent(this, FaceShootActivity::class.java))
 
-//        startActivity(
-//            FlutterActivity.createDefaultIntent(this)
-//        )
-//        supportFragmentManager.beginTransaction()
-//            .add(R.id.flutterfragment, FlutterFragment.createDefault(), "tag")
-//            .commit()
+
+//        startActivity(Intent(this, FaceShootActivity::class.java))
 
     }
 }

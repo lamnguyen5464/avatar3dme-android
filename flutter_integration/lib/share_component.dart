@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_integration/constants.dart';
+import 'package:social_share/social_share.dart';
 
 class ShareItem {
   String shareType;
@@ -17,6 +18,7 @@ class ShareFBAction extends ShareAction {
   @override
   void doShare() {
     print("Share FB");
+    SocialShare.shareOptions("Hello world");
   }
 }
 
