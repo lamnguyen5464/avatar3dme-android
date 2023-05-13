@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_integration/constants.dart';
 import 'package:social_share/social_share.dart';
 
@@ -16,9 +17,17 @@ abstract class ShareAction {
 
 class ShareFBAction extends ShareAction {
   @override
-  void doShare() {
+  Future<void> doShare() async {
     print("Share FB");
     SocialShare.shareOptions("Hello world");
+    const platform = MethodChannel('channel.common');
+
+    try {
+      final String result = await platform.invokeMethod('getImagePath', "img.png");
+      print("Success: $result");
+    } on PlatformException catch (e) {
+      print("Failed '${e.message}'.");
+    }
   }
 }
 
