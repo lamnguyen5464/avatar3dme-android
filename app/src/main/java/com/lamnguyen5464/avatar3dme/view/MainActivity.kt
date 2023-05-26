@@ -36,15 +36,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.toModelViewBt).setOnClickListener {
 //            startActivity(Intent(this, CustomizeActivity::class.java))
 
-            val bottomSheetShare = SharePlaygroundFragment()
-            bottomSheetShare.show(supportFragmentManager, SharePlaygroundFragment.TAG)
-
-            ScreenShotUtils.take(this)?.let { img ->
-                FileUtils.saveBitmap(
-                    bitmap = img,
-                    context = applicationContext
-                )
-            }
         }
 
 

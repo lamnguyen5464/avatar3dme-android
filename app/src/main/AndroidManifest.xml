@@ -4,8 +4,8 @@
     package="com.lamnguyen5464.avatar3dme">
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- camera access -->
-    <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -40,7 +40,13 @@
 
         <activity
             android:name=".view.OnboardingActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.CustomizeActivity"
             android:exported="false" />
@@ -57,11 +63,7 @@
         <activity
             android:name=".view.MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

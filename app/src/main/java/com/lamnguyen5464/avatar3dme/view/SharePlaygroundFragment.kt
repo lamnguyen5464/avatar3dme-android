@@ -28,7 +28,6 @@ class SharePlaygroundFragment : BottomSheetDialogFragment() {
             .transparencyMode(TransparencyMode.transparent)
             .build<FlutterFragment>()
 
-
         childFragmentManager
             .beginTransaction()
             .replace(R.id.flutterfragment, shareFlutterFragment, "shareFlutterFragment")

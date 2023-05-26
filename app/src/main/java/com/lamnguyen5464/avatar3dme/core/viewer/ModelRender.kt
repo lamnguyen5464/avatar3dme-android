@@ -1,10 +1,18 @@
 package com.lamnguyen5464.avatar3dme.core.viewer
 
+import android.graphics.Bitmap
 import android.opengl.GLES20
+import android.opengl.GLException
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
+import com.lamnguyen5464.avatar3dme.core.providers.Providers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import java.nio.IntBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
+
 
 /*
 * Copyright 2017 Dmitry Brant. All rights reserved.
@@ -33,6 +41,9 @@ class ModelRenderer(private val model: Model?) : GLSurfaceView.Renderer {
     private var translateX = 0f
     private var translateY = 0f
     private var translateZ = 0f
+    var cacheBitmap: Bitmap? = null
+    private var cacheWidth: Int = 0
+    private var cacheHeight: Int = 0
 
     fun translate(dx: Float, dy: Float, dz: Float) {
         val translateScaleFactor = MODEL_BOUND_SIZE / 200f
@@ -58,13 +69,17 @@ class ModelRenderer(private val model: Model?) : GLSurfaceView.Renderer {
         Matrix.rotateM(viewMatrix, 0, rotateAngleY, 0f, 1f, 0f)
     }
 
-    override fun onDrawFrame(unused: GL10) {
+    override fun onDrawFrame(gl10: GL10) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
         floor.draw(viewMatrix, projectionMatrix, light)
         model?.draw(viewMatrix, projectionMatrix, light)
+
+        if (cacheBitmap == null) {
+            cacheBitmap = createBitmapFromGLSurface(0, 0, cacheWidth, cacheHeight, gl10)
+        }
     }
 
-    override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
+    override fun onSurfaceChanged(gl10: GL10, width: Int, height: Int) {
         GLES20.glViewport(0, 0, width, height)
         val ratio = width.toFloat() / height
         Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1f, 1f, Z_NEAR, Z_FAR)
@@ -84,6 +99,10 @@ class ModelRenderer(private val model: Model?) : GLSurfaceView.Renderer {
         rotateAngleX = -15.0f
         rotateAngleY = 15.0f
         updateViewMatrix()
+
+        cacheWidth = width
+        cacheHeight = height
+
     }
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
@@ -97,6 +116,33 @@ class ModelRenderer(private val model: Model?) : GLSurfaceView.Renderer {
         if (model != null) {
             model.init(MODEL_BOUND_SIZE)
             floor.setOffsetY(model.floorOffset)
+        }
+    }
+
+    private fun createBitmapFromGLSurface(x: Int, y: Int, w: Int, h: Int, gl: GL10): Bitmap? {
+        try {
+            val bitmapBuffer = IntArray(w * h)
+            val bitmapSource = IntArray(w * h)
+            val intBuffer = IntBuffer.wrap(bitmapBuffer)
+            intBuffer.position(0)
+            gl.glReadPixels(x, y, w, h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, intBuffer)
+            var offset1: Int
+            var offset2: Int
+            for (i in 0 until h) {
+                offset1 = i * w
+                offset2 = (h - i - 1) * w
+                for (j in 0 until w) {
+                    val texturePixel = bitmapBuffer[offset1 + j]
+                    val blue = texturePixel shr 16 and 0xff
+                    val red = texturePixel shl 16 and 0x00ff0000
+                    val pixel = texturePixel and -0xff0100 or red or blue
+                    bitmapSource[offset2 + j] = pixel
+                }
+            }
+            return Bitmap.createBitmap(bitmapSource, w, h, Bitmap.Config.ARGB_8888)
+        } catch (e: GLException) {
+            e.printStackTrace()
+            return null
         }
     }
 

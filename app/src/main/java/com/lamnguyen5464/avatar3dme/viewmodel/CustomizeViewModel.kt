@@ -72,6 +72,7 @@ class CustomizeViewModel(private val activity: CustomizeActivity) {
     }
 
     private fun requestDecor(accessoryID: String) = Providers.commonIOScope.launch {
+        activity.showLoading()
         val request = RequestFactory.createDecorRequest(accessoryID)
         when (val response = Providers.httpClient.send(request)) {
             is SimpleHttpSuccessResponse -> {
@@ -82,9 +83,9 @@ class CustomizeViewModel(private val activity: CustomizeActivity) {
             }
 
             else -> {
-                // TODO: handle exception here
             }
         }
+        activity.hideLoading()
     }
 
 

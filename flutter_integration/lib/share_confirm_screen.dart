@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:async';
+import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,11 +16,30 @@ class ShareConfirmScreen extends StatefulWidget {
 
 class _ShareConfirmScreenState extends State<ShareConfirmScreen> {
   String? _localImageUrl;
+  StreamSubscription<dynamic>? eventSubscription = null;
 
   @override
   void initState() {
     super.initState();
     _fetchImageUrl();
+
+    const eventChannel = EventChannel('new_image_saved');
+    eventSubscription = eventChannel.receiveBroadcastStream().listen(
+          (eventData) {
+            setState(() {
+              _localImageUrl = null;
+            });
+        _fetchImageUrl();
+      },
+      onError: (error) {},
+      cancelOnError: false,
+    );
+  }
+
+  @override
+  void dispose() {
+    eventSubscription?.cancel();
+    super.dispose();
   }
 
   void _doShare(String content, String imagePath) {
@@ -30,7 +51,7 @@ class _ShareConfirmScreenState extends State<ShareConfirmScreen> {
 
     try {
       final String result =
-          await platform.invokeMethod('getImagePath', "img.png");
+      await platform.invokeMethod('getImagePath', "img.png");
       print("Success: $result");
       _updateLocalImageUrl(result);
     } on PlatformException catch (e) {
@@ -46,12 +67,13 @@ class _ShareConfirmScreenState extends State<ShareConfirmScreen> {
 
   Widget _renderImage(double screenWidth) {
     ImageProvider? localImage =
-        _localImageUrl != null ? FileImage(File(_localImageUrl!)) : null;
+    _localImageUrl != null ? FileImage(File(_localImageUrl!)) : null;
 
     const ImageProvider placeHolderImage = NetworkImage(
         "https://www.genius100visions.com/wp-content/uploads/2017/09/placeholder-vertical.jpg");
 
     return Container(
+      key: UniqueKey(),
       width: screenWidth,
       height: 300,
       decoration: BoxDecoration(
@@ -89,8 +111,8 @@ class _ShareConfirmScreenState extends State<ShareConfirmScreen> {
         _doShare("", _localImageUrl ?? "");
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF4b57a9),
-        fixedSize: const Size(200, 32)
+          backgroundColor: const Color(0xFF4b57a9),
+          fixedSize: const Size(200, 32)
       ),
       child: const Text('Share'),
     );
@@ -98,7 +120,9 @@ class _ShareConfirmScreenState extends State<ShareConfirmScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    var size = MediaQuery
+        .of(context)
+        .size;
     double screenHeight = size.height;
     double screenWidth = size.width;
 

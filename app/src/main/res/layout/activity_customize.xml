@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="SAVE"
+        android:text="SHARE"
         android:layout_margin="@dimen/spacing_small"
         android:textColor="@color/md_theme_dark_primary"/>
 
@@ -105,4 +105,26 @@
                 android:background="@drawable/hair_1" />
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.motion.widget.MotionLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_loading"
+        android:background="#CB000000"
+        android:visibility="gone"
+        >
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_centerVertical="true"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_colorFilter="@color/mtrl_text_btn_text_color_selector"
+            android:outlineAmbientShadowColor="@color/mtrl_text_btn_text_color_selector"
+            android:outlineSpotShadowColor="@color/mtrl_text_btn_text_color_selector"
+            app:lottie_rawRes="@raw/processing_animation" />
+    </RelativeLayout>
 </RelativeLayout>

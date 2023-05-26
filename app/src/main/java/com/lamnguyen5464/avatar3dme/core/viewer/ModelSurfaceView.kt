@@ -23,7 +23,7 @@ import kotlin.math.sqrt
 * limitations under the License.
 */
 class ModelSurfaceView(context: Context, private var model: Model?) : GLSurfaceView(context) {
-    private lateinit var renderer: ModelRenderer
+    lateinit var renderer: ModelRenderer
     private var previousX = 0f
     private var previousY = 0f
     private val pinchStartPoint = PointF()
