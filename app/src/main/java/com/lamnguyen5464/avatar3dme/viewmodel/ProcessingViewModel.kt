@@ -1,6 +1,7 @@
 package com.lamnguyen5464.avatar3dme.viewmodel
 
 import android.content.Intent
+import android.util.TimeUtils
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -16,6 +17,8 @@ import com.lamnguyen5464.avatar3dme.feature.RequestFactory
 import com.lamnguyen5464.avatar3dme.view.CustomizeActivity
 import com.lamnguyen5464.avatar3dme.view.ProcessingActivity
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -23,27 +26,52 @@ import java.io.InputStream
 
 class ProcessingViewModel(private val activity: ProcessingActivity) {
 
-    private val bitmapImg = Providers.currentProcessingImage
+    class ProcessHandler {
+        val processingState = MutableStateFlow<ProcessingState>(ProcessingState.Processing)
 
-    internal interface ProcessingState {
+        fun sendImage() {
+            val bitmapImg = Providers.currentProcessingImage
+            Providers.commonIOScope.launch {
+                if (bitmapImg == null) {
+                    processingState.emit(ProcessingState.Fail(Throwable("bitmapImg is null")))
+                    return@launch
+                }
+
+                val req = RequestFactory.createUploadBase64Request(
+                    bitmapImg.toBase64OfPng()
+                )
+
+                when (val res = Providers.httpClient.send(request = req)) {
+                    is SimpleHttpSuccessResponse -> processingState.emit(ProcessingState.Done(res.inputStream))
+                    is SimpleHttpFailureResponse -> processingState.emit(ProcessingState.Fail(res.exception))
+                }
+            }
+        }
+    }
+
+    companion object {
+        val processHandlerInstance by lazy {
+            ProcessHandler()
+        }
+
+    }
+
+    interface ProcessingState {
         object Processing : ProcessingState
         class Done(val result: InputStream) : ProcessingState
         class Fail(val exception: Throwable? = null) : ProcessingState
     }
 
-    private val processingState = MutableStateFlow<ProcessingState>(ProcessingState.Processing)
-
-    init {
-        sendImage()
-    }
-
     fun init() {
-        processingState.onEach { state ->
-            when (state) {
-                is ProcessingState.Done -> onProcessDone(state.result)
-                is ProcessingState.Fail -> onProcessFail(state.exception)
+        Providers.commonIOScope.launch {
+            processHandlerInstance.processingState.first { state ->
+                when (state) {
+                    is ProcessingState.Done -> onProcessDone(state.result)
+                    is ProcessingState.Fail -> onProcessFail(state.exception)
+                }
+                true
             }
-        }.launchIn(Providers.commonIOScope)
+        }
 
         activity.findViewById<Button>(R.id.bt_cancel).setOnClickListener {
             activity.finish()
@@ -57,27 +85,9 @@ class ProcessingViewModel(private val activity: ProcessingActivity) {
 
     private fun onProcessDone(inputStream: InputStream) {
         Providers.currentModel = ObjModel(inputStream)
-        activity.startActivity(Intent(activity.applicationContext, CustomizeActivity::class.java))
+        val intent = Intent(activity.applicationContext, CustomizeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
+        activity.startActivity(intent)
+        activity.finish()
     }
-
-    private fun sendImage() {
-        Providers.commonIOScope.launch {
-            if (bitmapImg == null) {
-                Toast.makeText(activity, "Capture image failed!", Toast.LENGTH_LONG).show()
-                processingState.emit(ProcessingState.Fail(Throwable("bitmapImg is null")))
-                return@launch
-            }
-
-            val req = RequestFactory.createUploadBase64Request(
-                bitmapImg.toBase64OfPng()
-            )
-
-            when (val res = Providers.httpClient.send(request = req)) {
-                is SimpleHttpSuccessResponse -> processingState.emit(ProcessingState.Done(res.inputStream))
-                is SimpleHttpFailureResponse -> processingState.emit(ProcessingState.Fail(res.exception))
-            }
-        }
-
-    }
-
 }

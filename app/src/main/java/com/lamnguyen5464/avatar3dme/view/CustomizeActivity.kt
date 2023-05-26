@@ -1,5 +1,7 @@
 package com.lamnguyen5464.avatar3dme.view
 
+import android.content.res.Configuration
+import android.graphics.ColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,6 +10,11 @@ import android.widget.RelativeLayout
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.TransitionAdapter
 import androidx.lifecycle.Observer
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieProperty
+import com.airbnb.lottie.SimpleColorFilter
+import com.airbnb.lottie.model.KeyPath
+import com.airbnb.lottie.value.LottieValueCallback
 import com.google.android.material.card.MaterialCardView
 import com.lamnguyen5464.avatar3dme.R
 import com.lamnguyen5464.avatar3dme.core.providers.Providers
@@ -54,6 +61,7 @@ class CustomizeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_customize)
+        decorView()
 
         viewModel.init()
 
@@ -118,6 +126,28 @@ class CustomizeActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun decorView() {
+        // Get the current dark mode state
+        val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+
+        val anim_view = findViewById<LottieAnimationView>(R.id.animation_view)
+
+        var filter = SimpleColorFilter(getColor(R.color.BLACK))
+
+        if (darkMode == Configuration.UI_MODE_NIGHT_YES) {
+            // Set the button background tint to a dark color
+            filter = SimpleColorFilter(getColor(R.color.md_theme_dark_primary))
+        } else {
+            // Set the button background tint to a light color
+            filter = SimpleColorFilter(getColor(R.color.md_theme_light_primary))
+        }
+
+        val keyPath = KeyPath("**")
+        val callback: LottieValueCallback<ColorFilter> = LottieValueCallback(filter)
+
+        anim_view.addValueCallback(keyPath, LottieProperty.COLOR_FILTER, callback)
     }
 
     private fun bindCard(it: CreditCardsModel) {
