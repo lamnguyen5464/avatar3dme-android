@@ -77,8 +77,8 @@ class CustomizeActivity : AppCompatActivity() {
 
         viewModel.initClickListener()
 
-        findViewById<Button>(R.id.bt_undo_custom).setOnClickListener {
-        }
+//        findViewById<Button>(R.id.bt_undo_custom).setOnClickListener {
+//        }
 
         findViewById<Button>(R.id.bt_save_custom).setOnClickListener {
             modelView?.renderer?.cacheBitmap?.let { img ->
