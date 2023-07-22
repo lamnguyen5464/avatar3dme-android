@@ -93,5 +93,18 @@
         app:iconTint="@color/md_theme_dark_onBackground"
         />
 
+    <Button
+        android:id="@+id/ic_album"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/spacing_medium"
+        android:layout_marginBottom="24dp"
+        android:layout_alignParentBottom="true"
+        android:translationZ="90dp"
+        app:icon="@drawable/ic_baseline_photo_album_50"
+        app:iconTint="@color/md_theme_dark_onBackground"
+        />
+
 
 </RelativeLayout>
