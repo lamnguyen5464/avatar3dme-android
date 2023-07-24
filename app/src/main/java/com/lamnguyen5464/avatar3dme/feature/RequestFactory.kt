@@ -5,7 +5,7 @@ import com.lamnguyen5464.avatar3dme.core.providers.Providers
 
 object RequestFactory {
 
-    private const val BASE_URL = "http://192.168.0.100:3000/"
+    private const val BASE_URL = "https://f11b-116-110-40-183.ngrok-free.app/"
     fun createUploadBase64Request(base64Img: String): SimpleHttpRequest {
         return SimpleHttpRequest()
             .baseUrl(BASE_URL)

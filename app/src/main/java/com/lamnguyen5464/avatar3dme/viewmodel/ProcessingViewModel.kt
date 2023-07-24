@@ -17,6 +17,7 @@ import com.lamnguyen5464.avatar3dme.feature.RequestFactory
 import com.lamnguyen5464.avatar3dme.view.CustomizeActivity
 import com.lamnguyen5464.avatar3dme.view.ProcessingActivity
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
@@ -62,9 +63,12 @@ class ProcessingViewModel(private val activity: ProcessingActivity) {
         class Fail(val exception: Throwable? = null) : ProcessingState
     }
 
+    private var didProcess = false
+
     fun init() {
         Providers.commonIOScope.launch {
-            processHandlerInstance.processingState.first { state ->
+            processHandlerInstance.processingState.collect { state ->
+
                 when (state) {
                     is ProcessingState.Done -> onProcessDone(state.result)
                     is ProcessingState.Fail -> onProcessFail(state.exception)
@@ -84,6 +88,10 @@ class ProcessingViewModel(private val activity: ProcessingActivity) {
     }
 
     private fun onProcessDone(inputStream: InputStream) {
+        if (didProcess) {
+            return
+        }
+        didProcess = true
         Providers.currentModel = ObjModel(inputStream)
         val intent = Intent(activity.applicationContext, CustomizeActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
