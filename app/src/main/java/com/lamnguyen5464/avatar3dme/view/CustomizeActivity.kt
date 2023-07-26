@@ -26,6 +26,10 @@ import com.lamnguyen5464.avatar3dme.core.viewer.ObjModel
 import com.lamnguyen5464.avatar3dme.model.CreditCardsModel
 import com.lamnguyen5464.avatar3dme.viewmodel.CustomizeViewModel
 import kotlinx.android.synthetic.main.activity_customize.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class CustomizeActivity : AppCompatActivity() {
@@ -61,9 +65,9 @@ class CustomizeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_customize)
-        decorView()
 
         viewModel.init()
+        decorView()
 
         viewModel
             .modelState
@@ -77,8 +81,11 @@ class CustomizeActivity : AppCompatActivity() {
 
         viewModel.initClickListener()
 
-//        findViewById<Button>(R.id.bt_undo_custom).setOnClickListener {
-//        }
+        viewModel.currentMode.onEach {
+            runOnUiThread {
+                findViewById<Button>(R.id.bt_mode).text = it.rawValue
+            }
+        }.launchIn(Providers.commonIOScope)
 
         findViewById<Button>(R.id.bt_save_custom).setOnClickListener {
             modelView?.renderer?.cacheBitmap?.let { img ->
@@ -87,9 +94,9 @@ class CustomizeActivity : AppCompatActivity() {
                     bitmap = img,
                     context = this,
                 )
-                Providers.commonIOScope.launch {
-                    newImageSavedSignal.emit("")
-                }
+//                Providers.commonIOScope.launch {
+//                    newImageSavedSignal.emit("")
+//                }
 
                 val bottomSheetShare = SharePlaygroundFragment()
                 bottomSheetShare.show(supportFragmentManager, SharePlaygroundFragment.TAG)

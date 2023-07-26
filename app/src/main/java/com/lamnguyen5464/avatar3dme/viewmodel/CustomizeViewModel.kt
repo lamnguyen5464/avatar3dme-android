@@ -1,5 +1,6 @@
 package com.lamnguyen5464.avatar3dme.viewmodel
 
+import android.widget.Button
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.card.MaterialCardView
@@ -11,32 +12,48 @@ import com.lamnguyen5464.avatar3dme.feature.RequestFactory
 import com.lamnguyen5464.avatar3dme.model.CreditCardModel
 import com.lamnguyen5464.avatar3dme.model.CreditCardsModel
 import com.lamnguyen5464.avatar3dme.view.CustomizeActivity
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+
+enum class DecorMode(val rawValue: String) {
+    HAIR("HAIR"), GLASSES("GLASSES")
+}
 
 class CustomizeViewModel(private val activity: CustomizeActivity) {
 
     private val stream = MutableLiveData<CreditCardsModel>()
 
     val modelState = MutableLiveData<ObjModel>()
+    var currentHair = ""
+    val currentMode = MutableStateFlow(DecorMode.HAIR)
 
     val modelStream: LiveData<CreditCardsModel>
         get() = stream
 
-    private val data = listOf(
+    private val hairs = listOf(
         CreditCardModel(thumbnailURI = R.drawable.hair_male_0, accessoryID = "hair_male_0"),
         CreditCardModel(thumbnailURI = R.drawable.hair_male_1, accessoryID = "hair_male_1"),
         CreditCardModel(thumbnailURI = R.drawable.hair_male_2, accessoryID = "hair_male_2"),
         CreditCardModel(thumbnailURI = R.drawable.hair_male_3, accessoryID = "hair_male_3"),
         CreditCardModel(thumbnailURI = R.drawable.hair_female_1, accessoryID = "hair_female_1"),
     )
+
+    private val glasses = listOf(
+        CreditCardModel(thumbnailURI = R.drawable.glasses0, accessoryID = "glasses0"),
+        CreditCardModel(thumbnailURI = R.drawable.glasses2, accessoryID = "glasses2"),
+        CreditCardModel(thumbnailURI = R.drawable.glasses4, accessoryID = "glasses4"),
+    )
+
+
+    private var data = hairs
+
     private var currentIndex = 0
 
-    private val cardOneLeft
-        get() = data[currentIndex % data.size]
-    private val cardCenter
-        get() = data[(currentIndex + 1) % data.size]
-    private val cardOneRight
-        get() = data[(currentIndex + 2) % data.size]
+    private fun cardOneLeft() = data[currentIndex % data.size]
+    private fun cardCenter() = data[(currentIndex + 1) % data.size]
+    private fun cardOneRight() = data[(currentIndex + 2) % data.size]
 
     private fun getMockModel() =
         activity.applicationContext.resources.openRawResource(R.raw.default_face).let {
@@ -49,6 +66,18 @@ class CustomizeViewModel(private val activity: CustomizeActivity) {
     fun init() {
         updateCards()
         modelState.value = Providers.currentModel ?: getMockModel()
+
+        currentMode.onEach {
+            val nextData = if (it.rawValue == DecorMode.GLASSES.rawValue) {
+                glasses
+            } else {
+                hairs
+            }
+            if (data != nextData) {
+                data = nextData
+                updateCards()
+            }
+        }.launchIn(Providers.commonIOScope)
     }
 
     fun swipeRight() {
@@ -67,13 +96,27 @@ class CustomizeViewModel(private val activity: CustomizeActivity) {
 
     fun initClickListener() {
         activity.findViewById<MaterialCardView>(R.id.cardCenter).setOnClickListener {
-            println("Applying accesory #" + cardCenter.accessoryID)
+            println("Applying accesory #" + cardCenter().accessoryID)
+        }
+
+        activity.findViewById<Button>(R.id.bt_mode).setOnClickListener {
+            val mode =
+                if (currentMode.value.rawValue != DecorMode.HAIR.rawValue) DecorMode.HAIR else DecorMode.GLASSES
+            Providers.commonIOScope.launch {
+                currentMode.emit(mode)
+            }
         }
     }
 
     private fun requestDecor(accessoryID: String) = Providers.commonIOScope.launch {
+        val attachment = if (accessoryID.contains("hair")) {
+            currentHair = accessoryID
+            ""
+        } else {
+            "_$currentHair"
+        }
         activity.showLoading()
-        val request = RequestFactory.createDecorRequest(accessoryID)
+        val request = RequestFactory.createDecorRequest(accessoryID, attachment)
         when (val response = Providers.httpClient.send(request)) {
             is SimpleHttpSuccessResponse -> {
                 val model = ObjModel(response.inputStream)
@@ -90,23 +133,14 @@ class CustomizeViewModel(private val activity: CustomizeActivity) {
 
 
     private fun updateCards() {
-        println("Update card")
-        this.requestDecor(cardCenter.accessoryID)
-        stream.value = CreditCardsModel(
-            cardOneLeft = cardOneLeft,
-            cardCenter = cardCenter,
-            cardOneRight = cardOneRight
-        )
+        this.requestDecor(cardCenter().accessoryID)
+        activity.runOnUiThread {
+            stream.value = CreditCardsModel(
+                cardOneLeft = cardOneLeft(),
+                cardCenter = cardCenter(),
+                cardOneRight = cardOneRight()
+            )
+        }
     }
 
-    companion object {
-        private val MOCK_ITEMS = listOf(
-            "hair_female_1",
-            "hair_female_2",
-            "hair_male_0",
-            "hair_male_1",
-            "hair_male_2",
-            "hair_male_3",
-        )
-    }
 }
