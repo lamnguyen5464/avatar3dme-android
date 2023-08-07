@@ -1,5 +1,6 @@
 package com.lamnguyen5464.avatar3dme.core.utils
 
+import android.R.attr.angle
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -35,4 +36,11 @@ fun Bitmap.toBase64OfPng(): String {
 fun Bitmap.rotate(degrees: Float): Bitmap {
     val matrix = Matrix().apply { postRotate(degrees) }
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+}
+
+fun Bitmap.flipX(): Bitmap {
+    val matrix = Matrix()
+    matrix.postScale(-1f, 1f, width / 2f, height / 2f);
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+
 }

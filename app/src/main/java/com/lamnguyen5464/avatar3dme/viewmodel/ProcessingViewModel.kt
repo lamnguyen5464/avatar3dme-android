@@ -67,13 +67,12 @@ class ProcessingViewModel(private val activity: ProcessingActivity) {
 
     fun init() {
         Providers.commonIOScope.launch {
+            processHandlerInstance.processingState.emit(ProcessingState.Processing)
             processHandlerInstance.processingState.collect { state ->
-
                 when (state) {
                     is ProcessingState.Done -> onProcessDone(state.result)
                     is ProcessingState.Fail -> onProcessFail(state.exception)
                 }
-                true
             }
         }
 
